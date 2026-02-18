@@ -37,8 +37,12 @@ public class UserDaoImp implements UserDao {
                 .createQuery("SELECT u FROM User u JOIN u.car c WHERE c.model=:model AND c.series=:series");
         query.setParameter("model", model);
         query.setParameter("series", series);
-        List<User> userList = (List<User>)query.getResultList();
-        return userList.getFirst();
+        List<User> userList = query.getResultList();
+        if (!userList.isEmpty()) {
+            return userList.get(0);
+        } else {
+            throw new RuntimeException("По данным параметрам нет пользователей");
+        }
     }
 }
 
