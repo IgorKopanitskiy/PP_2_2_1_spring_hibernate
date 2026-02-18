@@ -46,8 +46,8 @@ public class MainApp {
             System.out.println();
         }
 
-        //Получение пользователя(пользователей) из БД по модели и серии машины
-        List<User> result = userService.getUserByCarModelAndSeries("Mercedes GLA", 200);
+        //Получение пользователя из БД по модели и серии машины
+        User result = userService.getUserByCarModelAndSeries("Mercedes GLA", 200);
         System.out.println(result);
 
         context.close();

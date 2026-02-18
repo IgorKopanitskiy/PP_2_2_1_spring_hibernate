@@ -7,6 +7,8 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +32,18 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public List <User> getUserByCarModelAndSeries(String model, int series) {
+    public User getUserByCarModelAndSeries(String model, int series) {
         Query query = sessionFactory.getCurrentSession()
                 .createQuery("SELECT u FROM User u JOIN u.car c WHERE c.model=:model AND c.series=:series");
         query.setParameter("model", model);
         query.setParameter("series", series);
-        return (List<User>) query.getResultList();
+        try {
+            return (User) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            System.out.println("Данным параметрам удовлетворяет" +
+                    " 0 пользователей или более 1 пользователя");
+            return null;
+        }
     }
 }
 
